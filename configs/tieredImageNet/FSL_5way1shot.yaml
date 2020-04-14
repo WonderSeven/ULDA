@@ -1,0 +1,56 @@
+# Copyright (C) 2017 NVIDIA Corporation.  All rights reserved.
+# Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
+
+gpu_ids: '0,1'
+
+model:
+  embedding: "Conv64F1600"
+  classifier: "SVM_CS"  # protonet / SVM_CS / DN4
+  kwargs: "{}"
+
+datasets:
+  root: "/data/tiexin/DataSets/tiered_imagenet"
+  train_data_dir: "../datasets/tieredImageNet/train.csv"
+  val_data_dir: "../datasets/tieredImageNet/val.csv"
+  test_data_dir: "../datasets/tieredImageNet/test.csv"
+  episode_train_num: 10000  # 10000
+  episode_val_num: 1000
+  episode_test_num: 1000
+  name: "miniImageNet"
+  nclass: 100
+  way_num: 5
+  shot_num: 50
+  query_num: 15
+
+dataloader:
+  train_batch_size: 8 # 128
+  test_batch_size: 8
+  image_size: 84
+  num_workers: 8
+  shuffle: True
+
+trainer:
+  loggers: ['console', 'file']
+  eval_in_training: True
+  no_augment: False # False
+  eps: 0.0  # label smooth [no label smooth : eps<=0.]
+  output_dir: "/data/tiexin/data/No_transfer/SSL_Experiments/tieredImageNet/MetaOptNet_FSL_5way20shot"
+  seed: 12345
+  epochs: 60
+  test_epoch: -1
+  stage: 'test'
+  save_freq: 5
+  print_freq: 50
+
+scheduler:
+  name: 'lambda'
+  warmup_epochs: 0
+  iteration_decay: False
+  kwargs : "{'step_size':10, 'gamma':0.5}"
+
+solver:
+  base_lr: 0.001
+  optimizer: "SGD"
+  momentum: 0.9
+  weight_decay: 5e-4
+  criterion: 'cross_entropy'

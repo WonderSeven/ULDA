@@ -6,7 +6,7 @@ Unsupervised Few-shot Learning via Distribution Shift-based Augmentation
 ### Introduction
 This reposity contains the official implementation for the paper:
 
-[Unsupervised Few-shot Learning via Distribution Shift-based Augmentation](https://arxiv.org/abs/1910.08343)
+[Unsupervised Few-shot Learning via Distribution Shift-based Augmentation](https://arxiv.org/abs/2004.05805)
 
 Tiexin Qin, Wenbin Li, Yinghuan Shi and Yang Gao.
 

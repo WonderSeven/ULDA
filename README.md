@@ -17,7 +17,7 @@ Tiexin Qin, Wenbin Li, Yinghuan Shi and Yang Gao.
 
 
 ### Abstract
-Few-shot learning aims to learn a new concept when only a few training examples are available, which has been extensively explored in recent years. However, most of the current works heavily rely on a large-scale labeled auxiliary set to train their models in an episodic-training paradigm. Such a kind of supervised setting basically limits the widespread use of few-shot learning algorithms, especially in real-world applications. Instead, in this paper, we develop a novel framework called \emph{Unsupervised Few-shot Learning via Distribution Shift-based Data Augmentation} (ULDA), which pays attention to the distribution diversity inside each constructed pretext few-shot task when using data augmentation. Importantly, we highlight the value and importance of the distribution diversity in the augmentation-based pretext few-shot tasks. In ULDA, we systemically investigate the effects of different augmentation techniques and propose to strengthen the distribution diversity (or difference) between the query set and support set in each few-shot task, by augmenting these two sets separately (\ie shifting). In this way, even incorporated with simple augmentation techniques (\eg random crop, color jittering, or rotation), our ULDA can produce a significant improvement. In the experiments, few-shot models learned by ULDA can achieve superior generalization performance and obtain state-of-the-art results in a variety of established few-shot learning tasks on \emph{mini}ImageNet and \emph{tiered}ImageNet. The source code is available in https://github.com/WonderSeven/ULDA.
+Few-shot learning aims to learn a new concept when only a few training examples are available, which has been extensively explored in recent years. However, most of the current works heavily rely on a large-scale labeled auxiliary set to train their models in an episodic-training paradigm. Such a kind of supervised setting basically limits the widespread use of few-shot learning algorithms, especially in real-world applications. Instead, in this paper, we develop a novel framework called Unsupervised Few-shot Learning via Distribution Shift-based Data Augmentation (ULDA), which pays attention to the distribution diversity inside each constructed pretext few-shot task when using data augmentation. Importantly, we highlight the value and importance of the distribution diversity in the augmentation-based pretext few-shot tasks. In ULDA, we systemically investigate the effects of different augmentation techniques and propose to strengthen the distribution diversity (or difference) between the query set and support set in each few-shot task, by augmenting these two sets separately (i.e., shifting). In this way, even incorporated with simple augmentation techniques (e.g., random crop, color jittering, or rotation), our ULDA can produce a significant improvement. In the experiments, few-shot models learned by ULDA can achieve superior generalization performance and obtain state-of-the-art results in a variety of established few-shot learning tasks on miniImageNet and tieredImageNet. The source code is available in https://github.com/WonderSeven/ULDA.
 
 
 ### Dependencies
@@ -28,9 +28,13 @@ Few-shot learning aims to learn a new concept when only a few training examples 
 
 ### Useage
 
+For first running, you can test the uploaded model with the following steps.
+
 `cd Main/main.py`
 
 `python main.py --config ../configs/miniImageNet/ULDA_5way1shot.yaml`
+
+If you want to train your own models, just set `stage: 'train'` in [ULDA_5way1shot.yaml](./configs/miniImageNet/ULDA_5way1shot.yaml).
 
 Note that: the files end with `.yaml`  in configs contains the hyper-papameters for our experiments. This project has been test in pycharm, if you run it directly, you may need to change the index relationship of many files.
 

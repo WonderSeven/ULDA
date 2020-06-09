@@ -1,0 +1,241 @@
+# Copyright (C) 2017 NVIDIA Corporation.  All rights reserved.
+# Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
+# Implementation for: Unsupervised Meta-Learning For Few-Shot Image Classification
+# https://arxiv.org/abs/1811.11819
+
+gpu_ids: '4'
+
+model:
+  embedding: "Conv64F1600"  # Conv64F1600 / Conv64F
+  classifier: "ProtoNet"  # protonet / SVM_CS / DN4
+  kwargs: "{}"
+
+datasets:
+  root: "/data/tiexin/DataSets/miniImageNet"
+  train_data_dir: "../datasets/miniImageNet/train.csv"
+  val_data_dir: "../datasets/miniImageNet/val.csv"
+
+  test_data_dir: "../datasets/miniImageNet/test.csv"
+  episode_train_num: 10000  # 10000
+  episode_val_num: 1000
+  episode_test_num: 1000
+  name: "miniImageNet"
+  nclass: 100
+  way_num: 5
+  shot_num: 1
+  query_num: 15
+
+dataloader:
+  train_batch_size: 16 # 128
+  test_batch_size: 8
+  image_size: 84
+  num_workers: 8
+  shuffle: True
+
+trainer:
+  loggers: ['console', 'file']
+  eval_in_training: True
+  no_augment: False # False
+
+  eps: 0.0  # label smooth [no label smooth : eps<=0.]
+  output_dir: "./pretrain_model/ULDA"
+  seed: 12345
+  epochs: 60
+  test_epoch: -1
+  stage: 'train'
+  save_freq: 5
+  print_freq: 50
+
+scheduler:
+  name: 'lambda'
+  warmup_epochs: 0
+  iteration_decay: False
+  kwargs : "{'step_size':10, 'gamma':0.1}"
+
+solver:
+  base_lr: 0.001   # 0.1
+  optimizer: "SGD"
+  momentum: 0.9
+  weight_decay: 5e-4
+  criterion: 'cross_entropy'
+[2020-02-07 23:07:16,085] [miniImageNet] [INFO] 
+[2020-02-07 23:10:13,357] [miniImageNet] [INFO] Epoch:0 || Train Acc@1 48.750 (50.609), Train Acc@3 84.688 (84.523), train Loss 2.6952e+00 (2.7414e+00)
+[2020-02-07 23:10:13,357] [miniImageNet] [INFO] Epoch:0 || Val   Acc@1  29.00 ( 29.61), Val   Acc@3  65.67 ( 69.69), val   Loss 1.7013e+00 (1.6492e+00)
+[2020-02-07 23:10:13,357] [miniImageNet] [INFO] Epoch:0 || Test  Acc@1  27.67 ( 29.82), Test  Acc@3  66.67 ( 70.18), Test  Loss 1.6950e+00 (1.6390e+00) || Best Acc@1:29.61066246032715
+[2020-02-07 23:12:56,443] [miniImageNet] [INFO] Epoch:1 || Train Acc@1 57.812 (59.357), Train Acc@3 90.312 (90.711), train Loss 2.4804e+00 (2.4622e+00)
+[2020-02-07 23:12:56,444] [miniImageNet] [INFO] Epoch:1 || Val   Acc@1  35.00 ( 31.54), Val   Acc@3  69.83 ( 70.89), val   Loss 1.7386e+00 (1.7206e+00)
+[2020-02-07 23:12:56,444] [miniImageNet] [INFO] Epoch:1 || Test  Acc@1  31.50 ( 31.85), Test  Acc@3  67.67 ( 72.14), Test  Loss 1.7698e+00 (1.6925e+00) || Best Acc@1:31.540006637573242
+[2020-02-07 23:15:49,927] [miniImageNet] [INFO] Epoch:2 || Train Acc@1 70.625 (63.808), Train Acc@3 96.250 (92.553), train Loss 2.0138e+00 (2.3187e+00)
+[2020-02-07 23:15:49,928] [miniImageNet] [INFO] Epoch:2 || Val   Acc@1  31.50 ( 32.04), Val   Acc@3  70.17 ( 71.28), val   Loss 1.8748e+00 (1.8083e+00)
+[2020-02-07 23:15:49,928] [miniImageNet] [INFO] Epoch:2 || Test  Acc@1  31.83 ( 32.77), Test  Acc@3  73.83 ( 72.83), Test  Loss 1.6357e+00 (1.7598e+00) || Best Acc@1:32.0360107421875
+[2020-02-07 23:18:39,767] [miniImageNet] [INFO] Epoch:3 || Train Acc@1 75.625 (66.981), Train Acc@3 94.688 (93.699), train Loss 2.0493e+00 (2.2150e+00)
+[2020-02-07 23:18:39,768] [miniImageNet] [INFO] Epoch:3 || Val   Acc@1  32.33 ( 31.97), Val   Acc@3  70.50 ( 71.35), val   Loss 1.9009e+00 (1.8554e+00)
+[2020-02-07 23:18:39,768] [miniImageNet] [INFO] Epoch:3 || Test  Acc@1  29.67 ( 34.16), Test  Acc@3  72.83 ( 74.02), Test  Loss 1.8716e+00 (1.7847e+00) || Best Acc@1:32.0360107421875
+[2020-02-07 23:21:07,542] [miniImageNet] [INFO] Epoch:4 || Train Acc@1 68.438 (68.294), Train Acc@3 93.750 (94.266), train Loss 2.1294e+00 (2.1527e+00)
+[2020-02-07 23:21:07,543] [miniImageNet] [INFO] Epoch:4 || Val   Acc@1  32.67 ( 32.55), Val   Acc@3  70.50 ( 71.61), val   Loss 1.9538e+00 (1.8837e+00)
+[2020-02-07 23:21:07,543] [miniImageNet] [INFO] Epoch:4 || Test  Acc@1  32.33 ( 35.57), Test  Acc@3  72.00 ( 75.15), Test  Loss 1.9995e+00 (1.7597e+00) || Best Acc@1:32.54533004760742
+[2020-02-07 23:24:02,323] [miniImageNet] [INFO] Epoch:5 || Train Acc@1 64.688 (69.295), Train Acc@3 95.625 (94.590), train Loss 2.0668e+00 (2.1086e+00)
+[2020-02-07 23:24:02,324] [miniImageNet] [INFO] Epoch:5 || Val   Acc@1  33.67 ( 33.20), Val   Acc@3  73.00 ( 72.40), val   Loss 1.8591e+00 (1.8927e+00)
+[2020-02-07 23:24:02,324] [miniImageNet] [INFO] Epoch:5 || Test  Acc@1  38.00 ( 36.98), Test  Acc@3  76.00 ( 76.08), Test  Loss 1.7751e+00 (1.7467e+00) || Best Acc@1:33.20000457763672
+[2020-02-07 23:26:56,361] [miniImageNet] [INFO] Epoch:6 || Train Acc@1 55.312 (70.676), Train Acc@3 87.812 (95.092), train Loss 2.5532e+00 (2.0514e+00)
+[2020-02-07 23:26:56,362] [miniImageNet] [INFO] Epoch:6 || Val   Acc@1  37.50 ( 33.98), Val   Acc@3  73.33 ( 73.26), val   Loss 1.8239e+00 (1.8728e+00)
+[2020-02-07 23:26:56,362] [miniImageNet] [INFO] Epoch:6 || Test  Acc@1  37.67 ( 37.45), Test  Acc@3  81.17 ( 76.14), Test  Loss 1.7154e+00 (1.7588e+00) || Best Acc@1:33.984004974365234
+[2020-02-07 23:29:36,150] [miniImageNet] [INFO] Epoch:7 || Train Acc@1 64.688 (71.226), Train Acc@3 94.062 (95.161), train Loss 2.2192e+00 (2.0232e+00)
+[2020-02-07 23:29:36,151] [miniImageNet] [INFO] Epoch:7 || Val   Acc@1  35.33 ( 33.67), Val   Acc@3  72.50 ( 72.35), val   Loss 1.9340e+00 (1.9471e+00)
+[2020-02-07 23:29:36,152] [miniImageNet] [INFO] Epoch:7 || Test  Acc@1  36.17 ( 37.61), Test  Acc@3  74.83 ( 76.44), Test  Loss 1.8592e+00 (1.7878e+00) || Best Acc@1:33.984004974365234
+[2020-02-07 23:32:26,084] [miniImageNet] [INFO] Epoch:8 || Train Acc@1 82.812 (71.800), Train Acc@3 97.812 (95.294), train Loss 1.6310e+00 (1.9810e+00)
+[2020-02-07 23:32:26,085] [miniImageNet] [INFO] Epoch:8 || Val   Acc@1  31.00 ( 33.79), Val   Acc@3  69.67 ( 73.18), val   Loss 2.0891e+00 (1.9578e+00)
+[2020-02-07 23:32:26,085] [miniImageNet] [INFO] Epoch:8 || Test  Acc@1  41.83 ( 37.68), Test  Acc@3  79.67 ( 76.91), Test  Loss 1.7611e+00 (1.8167e+00) || Best Acc@1:33.984004974365234
+[2020-02-07 23:35:04,747] [miniImageNet] [INFO] Epoch:9 || Train Acc@1 70.312 (72.606), Train Acc@3 96.250 (95.649), train Loss 1.8585e+00 (1.9356e+00)
+[2020-02-07 23:35:04,748] [miniImageNet] [INFO] Epoch:9 || Val   Acc@1  35.50 ( 33.86), Val   Acc@3  74.17 ( 72.81), val   Loss 1.9675e+00 (2.0330e+00)
+[2020-02-07 23:35:04,748] [miniImageNet] [INFO] Epoch:9 || Test  Acc@1  42.83 ( 36.71), Test  Acc@3  79.50 ( 75.86), Test  Loss 1.7327e+00 (1.9064e+00) || Best Acc@1:33.984004974365234
+[2020-02-07 23:37:43,659] [miniImageNet] [INFO] Epoch:10 || Train Acc@1 83.125 (73.408), Train Acc@3 97.812 (95.847), train Loss 1.3853e+00 (1.8437e+00)
+[2020-02-07 23:37:43,660] [miniImageNet] [INFO] Epoch:10 || Val   Acc@1  33.33 ( 34.19), Val   Acc@3  72.67 ( 73.45), val   Loss 2.0963e+00 (2.0274e+00)
+[2020-02-07 23:37:43,660] [miniImageNet] [INFO] Epoch:10 || Test  Acc@1  37.00 ( 37.79), Test  Acc@3  74.17 ( 76.91), Test  Loss 1.8936e+00 (1.8861e+00) || Best Acc@1:34.194664001464844
+[2020-02-07 23:40:27,295] [miniImageNet] [INFO] Epoch:11 || Train Acc@1 86.562 (73.494), Train Acc@3 98.125 (95.909), train Loss 1.1810e+00 (1.7154e+00)
+[2020-02-07 23:40:27,296] [miniImageNet] [INFO] Epoch:11 || Val   Acc@1  29.17 ( 33.87), Val   Acc@3  71.17 ( 72.76), val   Loss 2.0179e+00 (2.0302e+00)
+[2020-02-07 23:40:27,296] [miniImageNet] [INFO] Epoch:11 || Test  Acc@1  29.17 ( 37.77), Test  Acc@3  73.00 ( 77.11), Test  Loss 2.1253e+00 (1.8623e+00) || Best Acc@1:34.194664001464844
+[2020-02-07 23:43:06,801] [miniImageNet] [INFO] Epoch:12 || Train Acc@1 87.188 (73.360), Train Acc@3 97.812 (95.800), train Loss 9.7881e-01 (1.5762e+00)
+[2020-02-07 23:43:06,801] [miniImageNet] [INFO] Epoch:12 || Val   Acc@1  35.33 ( 33.97), Val   Acc@3  75.00 ( 73.18), val   Loss 1.8957e+00 (2.0495e+00)
+[2020-02-07 23:43:06,802] [miniImageNet] [INFO] Epoch:12 || Test  Acc@1  33.33 ( 37.47), Test  Acc@3  75.00 ( 76.97), Test  Loss 1.9449e+00 (1.8852e+00) || Best Acc@1:34.194664001464844
+[2020-02-07 23:45:42,534] [miniImageNet] [INFO] Epoch:13 || Train Acc@1 80.000 (73.034), Train Acc@3 97.812 (95.790), train Loss 1.2035e+00 (1.4955e+00)
+[2020-02-07 23:45:42,534] [miniImageNet] [INFO] Epoch:13 || Val   Acc@1  31.67 ( 33.84), Val   Acc@3  74.67 ( 73.12), val   Loss 2.1200e+00 (2.0560e+00)
+[2020-02-07 23:45:42,535] [miniImageNet] [INFO] Epoch:13 || Test  Acc@1  38.17 ( 38.65), Test  Acc@3  78.33 ( 77.45), Test  Loss 1.9252e+00 (1.8682e+00) || Best Acc@1:34.194664001464844
+[2020-02-07 23:48:24,775] [miniImageNet] [INFO] Epoch:14 || Train Acc@1 83.750 (73.792), Train Acc@3 98.750 (96.049), train Loss 8.8656e-01 (1.4213e+00)
+[2020-02-07 23:48:24,775] [miniImageNet] [INFO] Epoch:14 || Val   Acc@1  36.33 ( 34.11), Val   Acc@3  73.33 ( 73.54), val   Loss 2.1235e+00 (2.0651e+00)
+[2020-02-07 23:48:24,775] [miniImageNet] [INFO] Epoch:14 || Test  Acc@1  40.50 ( 38.99), Test  Acc@3  76.50 ( 77.80), Test  Loss 1.8531e+00 (1.8713e+00) || Best Acc@1:34.194664001464844
+[2020-02-07 23:50:46,419] [miniImageNet] [INFO] Epoch:15 || Train Acc@1 85.000 (73.647), Train Acc@3 98.750 (96.002), train Loss 1.0612e+00 (1.4058e+00)
+[2020-02-07 23:50:46,419] [miniImageNet] [INFO] Epoch:15 || Val   Acc@1  37.67 ( 34.77), Val   Acc@3  71.33 ( 73.92), val   Loss 2.0812e+00 (2.0248e+00)
+[2020-02-07 23:50:46,419] [miniImageNet] [INFO] Epoch:15 || Test  Acc@1  44.17 ( 39.45), Test  Acc@3  81.50 ( 78.41), Test  Loss 1.6428e+00 (1.8511e+00) || Best Acc@1:34.76533889770508
+[2020-02-07 23:53:24,208] [miniImageNet] [INFO] Epoch:16 || Train Acc@1 60.625 (73.723), Train Acc@3 90.938 (95.920), train Loss 2.3269e+00 (1.3750e+00)
+[2020-02-07 23:53:24,208] [miniImageNet] [INFO] Epoch:16 || Val   Acc@1  32.00 ( 34.83), Val   Acc@3  76.00 ( 74.11), val   Loss 1.9427e+00 (2.0300e+00)
+[2020-02-07 23:53:24,208] [miniImageNet] [INFO] Epoch:16 || Test  Acc@1  37.83 ( 39.69), Test  Acc@3  81.17 ( 79.11), Test  Loss 1.7007e+00 (1.8041e+00) || Best Acc@1:34.826663970947266
+[2020-02-07 23:56:09,959] [miniImageNet] [INFO] Epoch:17 || Train Acc@1 48.438 (74.720), Train Acc@3 90.312 (96.147), train Loss 2.8665e+00 (1.3212e+00)
+[2020-02-07 23:56:09,959] [miniImageNet] [INFO] Epoch:17 || Val   Acc@1  35.17 ( 34.66), Val   Acc@3  72.83 ( 73.72), val   Loss 2.1521e+00 (2.0622e+00)
+[2020-02-07 23:56:09,959] [miniImageNet] [INFO] Epoch:17 || Test  Acc@1  38.67 ( 39.34), Test  Acc@3  77.17 ( 78.24), Test  Loss 1.9573e+00 (1.8866e+00) || Best Acc@1:34.826663970947266
+[2020-02-07 23:58:43,305] [miniImageNet] [INFO] Epoch:18 || Train Acc@1 69.375 (74.871), Train Acc@3 94.688 (96.192), train Loss 1.5122e+00 (1.3061e+00)
+[2020-02-07 23:58:43,305] [miniImageNet] [INFO] Epoch:18 || Val   Acc@1  38.83 ( 34.58), Val   Acc@3  78.67 ( 73.59), val   Loss 1.7037e+00 (2.0343e+00)
+[2020-02-07 23:58:43,305] [miniImageNet] [INFO] Epoch:18 || Test  Acc@1  31.83 ( 39.30), Test  Acc@3  75.50 ( 78.15), Test  Loss 2.1524e+00 (1.8570e+00) || Best Acc@1:34.826663970947266
+[2020-02-08 00:01:26,387] [miniImageNet] [INFO] Epoch:19 || Train Acc@1 89.062 (75.687), Train Acc@3 98.750 (96.479), train Loss 7.2013e-01 (1.2542e+00)
+[2020-02-08 00:01:26,388] [miniImageNet] [INFO] Epoch:19 || Val   Acc@1  37.83 ( 34.54), Val   Acc@3  73.83 ( 73.80), val   Loss 2.0757e+00 (2.1151e+00)
+[2020-02-08 00:01:26,388] [miniImageNet] [INFO] Epoch:19 || Test  Acc@1  40.67 ( 39.72), Test  Acc@3  79.17 ( 78.16), Test  Loss 1.9158e+00 (1.8795e+00) || Best Acc@1:34.826663970947266
+[2020-02-08 00:04:10,116] [miniImageNet] [INFO] Epoch:20 || Train Acc@1 56.562 (76.221), Train Acc@3 91.562 (96.640), train Loss 2.5688e+00 (1.1964e+00)
+[2020-02-08 00:04:10,116] [miniImageNet] [INFO] Epoch:20 || Val   Acc@1  35.00 ( 34.92), Val   Acc@3  73.83 ( 74.41), val   Loss 2.1789e+00 (2.0657e+00)
+[2020-02-08 00:04:10,117] [miniImageNet] [INFO] Epoch:20 || Test  Acc@1  37.67 ( 39.57), Test  Acc@3  77.67 ( 78.33), Test  Loss 1.8721e+00 (1.8906e+00) || Best Acc@1:34.92133331298828
+[2020-02-08 00:06:30,906] [miniImageNet] [INFO] Epoch:21 || Train Acc@1 84.375 (75.604), Train Acc@3 98.750 (96.494), train Loss 7.5273e-01 (1.2284e+00)
+[2020-02-08 00:06:30,907] [miniImageNet] [INFO] Epoch:21 || Val   Acc@1  32.33 ( 35.10), Val   Acc@3  72.00 ( 74.52), val   Loss 2.2136e+00 (2.0544e+00)
+[2020-02-08 00:06:30,907] [miniImageNet] [INFO] Epoch:21 || Test  Acc@1  41.00 ( 39.84), Test  Acc@3  77.17 ( 78.93), Test  Loss 1.8526e+00 (1.8411e+00) || Best Acc@1:35.09600067138672
+[2020-02-08 00:09:09,774] [miniImageNet] [INFO] Epoch:22 || Train Acc@1 75.312 (77.300), Train Acc@3 98.125 (96.818), train Loss 1.0212e+00 (1.1507e+00)
+[2020-02-08 00:09:09,775] [miniImageNet] [INFO] Epoch:22 || Val   Acc@1  33.83 ( 35.43), Val   Acc@3  71.17 ( 74.68), val   Loss 2.1253e+00 (2.0521e+00)
+[2020-02-08 00:09:09,775] [miniImageNet] [INFO] Epoch:22 || Test  Acc@1  36.50 ( 40.15), Test  Acc@3  78.83 ( 79.15), Test  Loss 1.8649e+00 (1.8412e+00) || Best Acc@1:35.43199920654297
+[2020-02-08 00:11:53,472] [miniImageNet] [INFO] Epoch:23 || Train Acc@1 85.000 (76.756), Train Acc@3 98.125 (96.812), train Loss 7.3178e-01 (1.1724e+00)
+[2020-02-08 00:11:53,473] [miniImageNet] [INFO] Epoch:23 || Val   Acc@1  33.17 ( 35.07), Val   Acc@3  72.33 ( 74.46), val   Loss 2.2039e+00 (2.0521e+00)
+[2020-02-08 00:11:53,474] [miniImageNet] [INFO] Epoch:23 || Test  Acc@1  39.17 ( 39.75), Test  Acc@3  79.00 ( 78.80), Test  Loss 1.8778e+00 (1.8587e+00) || Best Acc@1:35.43199920654297
+[2020-02-08 00:14:23,533] [miniImageNet] [INFO] Epoch:24 || Train Acc@1 83.125 (77.439), Train Acc@3 99.688 (96.985), train Loss 7.9340e-01 (1.1553e+00)
+[2020-02-08 00:14:23,534] [miniImageNet] [INFO] Epoch:24 || Val   Acc@1  36.17 ( 34.74), Val   Acc@3  78.17 ( 74.12), val   Loss 1.7994e+00 (2.0831e+00)
+[2020-02-08 00:14:23,534] [miniImageNet] [INFO] Epoch:24 || Test  Acc@1  43.00 ( 39.62), Test  Acc@3  81.83 ( 78.67), Test  Loss 1.7124e+00 (1.8804e+00) || Best Acc@1:35.43199920654297
+[2020-02-08 00:17:12,969] [miniImageNet] [INFO] Epoch:25 || Train Acc@1 90.625 (77.190), Train Acc@3 99.688 (96.722), train Loss 6.0856e-01 (1.1607e+00)
+[2020-02-08 00:17:12,970] [miniImageNet] [INFO] Epoch:25 || Val   Acc@1  36.50 ( 35.26), Val   Acc@3  78.33 ( 74.62), val   Loss 1.9015e+00 (2.0689e+00)
+[2020-02-08 00:17:12,970] [miniImageNet] [INFO] Epoch:25 || Test  Acc@1  43.17 ( 39.77), Test  Acc@3  78.00 ( 79.28), Test  Loss 1.7359e+00 (1.8595e+00) || Best Acc@1:35.43199920654297
+[2020-02-08 00:19:56,597] [miniImageNet] [INFO] Epoch:26 || Train Acc@1 68.750 (78.058), Train Acc@3 96.250 (97.106), train Loss 1.4797e+00 (1.1232e+00)
+[2020-02-08 00:19:56,598] [miniImageNet] [INFO] Epoch:26 || Val   Acc@1  37.67 ( 35.38), Val   Acc@3  76.33 ( 74.71), val   Loss 2.0668e+00 (2.0627e+00)
+[2020-02-08 00:19:56,598] [miniImageNet] [INFO] Epoch:26 || Test  Acc@1  32.67 ( 40.32), Test  Acc@3  71.00 ( 79.38), Test  Loss 2.1529e+00 (1.8581e+00) || Best Acc@1:35.43199920654297
+[2020-02-08 00:22:20,158] [miniImageNet] [INFO] Epoch:27 || Train Acc@1 90.938 (77.364), Train Acc@3 99.062 (96.826), train Loss 6.1336e-01 (1.1391e+00)
+[2020-02-08 00:22:20,158] [miniImageNet] [INFO] Epoch:27 || Val   Acc@1  30.83 ( 34.89), Val   Acc@3  75.50 ( 74.12), val   Loss 2.1606e+00 (2.0678e+00)
+[2020-02-08 00:22:20,159] [miniImageNet] [INFO] Epoch:27 || Test  Acc@1  38.83 ( 39.44), Test  Acc@3  78.33 ( 78.58), Test  Loss 1.9645e+00 (1.8797e+00) || Best Acc@1:35.43199920654297
+[2020-02-08 00:25:01,899] [miniImageNet] [INFO] Epoch:28 || Train Acc@1 89.062 (77.646), Train Acc@3 100.000 (96.925), train Loss 6.6229e-01 (1.1397e+00)
+[2020-02-08 00:25:01,900] [miniImageNet] [INFO] Epoch:28 || Val   Acc@1  36.17 ( 34.90), Val   Acc@3  74.17 ( 74.19), val   Loss 2.1702e+00 (2.0878e+00)
+[2020-02-08 00:25:01,901] [miniImageNet] [INFO] Epoch:28 || Test  Acc@1  41.83 ( 39.99), Test  Acc@3  80.83 ( 78.63), Test  Loss 1.6732e+00 (1.8700e+00) || Best Acc@1:35.43199920654297
+[2020-02-08 00:27:47,514] [miniImageNet] [INFO] Epoch:29 || Train Acc@1 71.250 (76.562), Train Acc@3 95.000 (96.706), train Loss 1.4305e+00 (1.1913e+00)
+[2020-02-08 00:27:47,515] [miniImageNet] [INFO] Epoch:29 || Val   Acc@1  34.17 ( 35.28), Val   Acc@3  70.33 ( 74.55), val   Loss 2.1574e+00 (2.0680e+00)
+[2020-02-08 00:27:47,515] [miniImageNet] [INFO] Epoch:29 || Test  Acc@1  42.17 ( 39.85), Test  Acc@3  79.67 ( 78.94), Test  Loss 1.7114e+00 (1.8619e+00) || Best Acc@1:35.43199920654297
+[2020-02-08 00:30:12,348] [miniImageNet] [INFO] Epoch:30 || Train Acc@1 83.750 (77.764), Train Acc@3 99.062 (96.966), train Loss 8.3810e-01 (1.1278e+00)
+[2020-02-08 00:30:12,349] [miniImageNet] [INFO] Epoch:30 || Val   Acc@1  38.67 ( 35.26), Val   Acc@3  72.67 ( 74.68), val   Loss 2.1158e+00 (2.0830e+00)
+[2020-02-08 00:30:12,349] [miniImageNet] [INFO] Epoch:30 || Test  Acc@1  39.17 ( 39.76), Test  Acc@3  74.83 ( 78.54), Test  Loss 2.1619e+00 (1.8960e+00) || Best Acc@1:35.43199920654297
+[2020-02-08 00:32:53,506] [miniImageNet] [INFO] Epoch:31 || Train Acc@1 70.000 (77.244), Train Acc@3 98.438 (96.868), train Loss 9.6287e-01 (1.1411e+00)
+[2020-02-08 00:32:53,507] [miniImageNet] [INFO] Epoch:31 || Val   Acc@1  33.50 ( 35.21), Val   Acc@3  75.17 ( 74.07), val   Loss 2.0793e+00 (2.0842e+00)
+[2020-02-08 00:32:53,507] [miniImageNet] [INFO] Epoch:31 || Test  Acc@1  44.33 ( 40.24), Test  Acc@3  84.33 ( 78.92), Test  Loss 1.5764e+00 (1.8537e+00) || Best Acc@1:35.43199920654297
+[2020-02-08 00:35:37,921] [miniImageNet] [INFO] Epoch:32 || Train Acc@1 83.438 (77.436), Train Acc@3 99.062 (96.943), train Loss 9.5890e-01 (1.1504e+00)
+[2020-02-08 00:35:37,922] [miniImageNet] [INFO] Epoch:32 || Val   Acc@1  36.50 ( 34.85), Val   Acc@3  76.83 ( 74.31), val   Loss 1.9828e+00 (2.0873e+00)
+[2020-02-08 00:35:37,922] [miniImageNet] [INFO] Epoch:32 || Test  Acc@1  37.83 ( 40.56), Test  Acc@3  78.50 ( 79.16), Test  Loss 1.9237e+00 (1.8445e+00) || Best Acc@1:35.43199920654297
+[2020-02-08 00:37:50,894] [miniImageNet] [INFO] Epoch:33 || Train Acc@1 68.438 (78.010), Train Acc@3 96.250 (97.062), train Loss 1.8088e+00 (1.1151e+00)
+[2020-02-08 00:37:50,895] [miniImageNet] [INFO] Epoch:33 || Val   Acc@1  34.50 ( 35.20), Val   Acc@3  76.83 ( 74.54), val   Loss 2.1136e+00 (2.0906e+00)
+[2020-02-08 00:37:50,895] [miniImageNet] [INFO] Epoch:33 || Test  Acc@1  34.00 ( 39.80), Test  Acc@3  76.33 ( 78.86), Test  Loss 2.1128e+00 (1.8763e+00) || Best Acc@1:35.43199920654297
+[2020-02-08 00:40:27,866] [miniImageNet] [INFO] Epoch:34 || Train Acc@1 69.688 (77.927), Train Acc@3 95.312 (96.926), train Loss 1.6456e+00 (1.1158e+00)
+[2020-02-08 00:40:27,866] [miniImageNet] [INFO] Epoch:34 || Val   Acc@1  34.50 ( 34.91), Val   Acc@3  74.33 ( 74.34), val   Loss 2.1603e+00 (2.0990e+00)
+[2020-02-08 00:40:27,867] [miniImageNet] [INFO] Epoch:34 || Test  Acc@1  38.33 ( 40.64), Test  Acc@3  76.33 ( 78.98), Test  Loss 2.0143e+00 (1.8681e+00) || Best Acc@1:35.43199920654297
+[2020-02-08 00:43:06,127] [miniImageNet] [INFO] Epoch:35 || Train Acc@1 86.875 (77.045), Train Acc@3 98.750 (96.854), train Loss 8.5306e-01 (1.1554e+00)
+[2020-02-08 00:43:06,127] [miniImageNet] [INFO] Epoch:35 || Val   Acc@1  38.67 ( 34.84), Val   Acc@3  76.83 ( 73.87), val   Loss 2.1059e+00 (2.0960e+00)
+[2020-02-08 00:43:06,128] [miniImageNet] [INFO] Epoch:35 || Test  Acc@1  38.00 ( 39.78), Test  Acc@3  74.67 ( 78.76), Test  Loss 2.1474e+00 (1.8784e+00) || Best Acc@1:35.43199920654297
+[2020-02-08 00:45:29,441] [miniImageNet] [INFO] Epoch:36 || Train Acc@1 82.500 (77.503), Train Acc@3 96.562 (96.923), train Loss 8.3273e-01 (1.1551e+00)
+[2020-02-08 00:45:29,442] [miniImageNet] [INFO] Epoch:36 || Val   Acc@1  38.33 ( 35.07), Val   Acc@3  76.50 ( 74.06), val   Loss 1.8959e+00 (2.0836e+00)
+[2020-02-08 00:45:29,442] [miniImageNet] [INFO] Epoch:36 || Test  Acc@1  37.50 ( 39.99), Test  Acc@3  76.50 ( 78.73), Test  Loss 2.0659e+00 (1.8735e+00) || Best Acc@1:35.43199920654297
+[2020-02-08 00:48:07,707] [miniImageNet] [INFO] Epoch:37 || Train Acc@1 39.062 (79.117), Train Acc@3 77.812 (97.290), train Loss 2.7816e+00 (1.0787e+00)
+[2020-02-08 00:48:07,707] [miniImageNet] [INFO] Epoch:37 || Val   Acc@1  39.67 ( 35.42), Val   Acc@3  76.83 ( 74.43), val   Loss 1.9480e+00 (2.0958e+00)
+[2020-02-08 00:48:07,707] [miniImageNet] [INFO] Epoch:37 || Test  Acc@1  43.50 ( 40.33), Test  Acc@3  80.83 ( 79.29), Test  Loss 1.8490e+00 (1.8628e+00) || Best Acc@1:35.43199920654297
+[2020-02-08 00:50:48,114] [miniImageNet] [INFO] Epoch:38 || Train Acc@1 85.312 (78.478), Train Acc@3 98.750 (97.134), train Loss 6.0316e-01 (1.1085e+00)
+[2020-02-08 00:50:48,115] [miniImageNet] [INFO] Epoch:38 || Val   Acc@1  38.50 ( 34.96), Val   Acc@3  76.50 ( 74.27), val   Loss 2.0771e+00 (2.0841e+00)
+[2020-02-08 00:50:48,115] [miniImageNet] [INFO] Epoch:38 || Test  Acc@1  40.17 ( 40.26), Test  Acc@3  80.00 ( 79.24), Test  Loss 1.8894e+00 (1.8680e+00) || Best Acc@1:35.43199920654297
+[2020-02-08 00:53:05,478] [miniImageNet] [INFO] Epoch:39 || Train Acc@1 57.500 (76.830), Train Acc@3 95.000 (96.757), train Loss 2.3547e+00 (1.1754e+00)
+[2020-02-08 00:53:05,479] [miniImageNet] [INFO] Epoch:39 || Val   Acc@1  33.17 ( 35.22), Val   Acc@3  74.33 ( 74.58), val   Loss 2.1562e+00 (2.0914e+00)
+[2020-02-08 00:53:05,480] [miniImageNet] [INFO] Epoch:39 || Test  Acc@1  36.00 ( 40.43), Test  Acc@3  76.33 ( 79.31), Test  Loss 2.0137e+00 (1.8563e+00) || Best Acc@1:35.43199920654297
+[2020-02-08 00:55:38,163] [miniImageNet] [INFO] Epoch:40 || Train Acc@1 92.188 (77.344), Train Acc@3 99.688 (96.939), train Loss 5.5266e-01 (1.1338e+00)
+[2020-02-08 00:55:38,163] [miniImageNet] [INFO] Epoch:40 || Val   Acc@1  36.17 ( 35.22), Val   Acc@3  74.33 ( 74.35), val   Loss 2.0797e+00 (2.0820e+00)
+[2020-02-08 00:55:38,164] [miniImageNet] [INFO] Epoch:40 || Test  Acc@1  36.67 ( 40.56), Test  Acc@3  77.00 ( 79.52), Test  Loss 1.8552e+00 (1.8396e+00) || Best Acc@1:35.43199920654297
+[2020-02-08 00:58:16,282] [miniImageNet] [INFO] Epoch:41 || Train Acc@1 88.438 (77.340), Train Acc@3 99.375 (97.008), train Loss 6.8213e-01 (1.1353e+00)
+[2020-02-08 00:58:16,282] [miniImageNet] [INFO] Epoch:41 || Val   Acc@1  33.00 ( 35.02), Val   Acc@3  72.67 ( 74.19), val   Loss 2.0782e+00 (2.0947e+00)
+[2020-02-08 00:58:16,283] [miniImageNet] [INFO] Epoch:41 || Test  Acc@1  40.17 ( 39.92), Test  Acc@3  78.50 ( 79.28), Test  Loss 1.8045e+00 (1.8625e+00) || Best Acc@1:35.43199920654297
+[2020-02-08 01:00:44,660] [miniImageNet] [INFO] Epoch:42 || Train Acc@1 50.000 (78.020), Train Acc@3 87.500 (96.947), train Loss 2.7457e+00 (1.1057e+00)
+[2020-02-08 01:00:44,661] [miniImageNet] [INFO] Epoch:42 || Val   Acc@1  35.33 ( 35.05), Val   Acc@3  76.33 ( 74.23), val   Loss 1.9747e+00 (2.0867e+00)
+[2020-02-08 01:00:44,661] [miniImageNet] [INFO] Epoch:42 || Test  Acc@1  42.67 ( 39.80), Test  Acc@3  79.67 ( 79.09), Test  Loss 1.8886e+00 (1.8755e+00) || Best Acc@1:35.43199920654297
+[2020-02-08 01:03:21,221] [miniImageNet] [INFO] Epoch:43 || Train Acc@1 87.500 (78.134), Train Acc@3 99.688 (97.074), train Loss 8.4916e-01 (1.1048e+00)
+[2020-02-08 01:03:21,222] [miniImageNet] [INFO] Epoch:43 || Val   Acc@1  39.67 ( 35.41), Val   Acc@3  76.33 ( 74.43), val   Loss 1.9790e+00 (2.0974e+00)
+[2020-02-08 01:03:21,222] [miniImageNet] [INFO] Epoch:43 || Test  Acc@1  38.83 ( 40.38), Test  Acc@3  76.67 ( 79.35), Test  Loss 1.9357e+00 (1.8632e+00) || Best Acc@1:35.43199920654297
+[2020-02-08 01:06:01,402] [miniImageNet] [INFO] Epoch:44 || Train Acc@1 87.188 (77.489), Train Acc@3 100.000 (96.966), train Loss 6.1910e-01 (1.1373e+00)
+[2020-02-08 01:06:01,403] [miniImageNet] [INFO] Epoch:44 || Val   Acc@1  35.50 ( 34.90), Val   Acc@3  71.17 ( 73.93), val   Loss 2.1429e+00 (2.1051e+00)
+[2020-02-08 01:06:01,403] [miniImageNet] [INFO] Epoch:44 || Test  Acc@1  38.33 ( 40.66), Test  Acc@3  76.67 ( 79.66), Test  Loss 1.8618e+00 (1.8461e+00) || Best Acc@1:35.43199920654297
+[2020-02-08 01:08:19,235] [miniImageNet] [INFO] Epoch:45 || Train Acc@1 71.562 (77.214), Train Acc@3 96.250 (96.769), train Loss 1.2389e+00 (1.1535e+00)
+[2020-02-08 01:08:19,236] [miniImageNet] [INFO] Epoch:45 || Val   Acc@1  30.50 ( 34.97), Val   Acc@3  73.00 ( 74.27), val   Loss 2.3323e+00 (2.0802e+00)
+[2020-02-08 01:08:19,236] [miniImageNet] [INFO] Epoch:45 || Test  Acc@1  41.83 ( 40.25), Test  Acc@3  80.33 ( 78.86), Test  Loss 1.8271e+00 (1.8732e+00) || Best Acc@1:35.43199920654297
+[2020-02-08 01:10:50,016] [miniImageNet] [INFO] Epoch:46 || Train Acc@1 63.438 (77.743), Train Acc@3 94.375 (96.921), train Loss 2.2658e+00 (1.1142e+00)
+[2020-02-08 01:10:50,016] [miniImageNet] [INFO] Epoch:46 || Val   Acc@1  42.83 ( 35.56), Val   Acc@3  80.83 ( 74.62), val   Loss 1.7573e+00 (2.0910e+00)
+[2020-02-08 01:10:50,016] [miniImageNet] [INFO] Epoch:46 || Test  Acc@1  33.83 ( 40.24), Test  Acc@3  70.67 ( 78.65), Test  Loss 2.2918e+00 (1.8790e+00) || Best Acc@1:35.561336517333984
+[2020-02-08 01:13:28,536] [miniImageNet] [INFO] Epoch:47 || Train Acc@1 81.875 (78.197), Train Acc@3 99.375 (97.112), train Loss 9.2698e-01 (1.1121e+00)
+[2020-02-08 01:13:28,537] [miniImageNet] [INFO] Epoch:47 || Val   Acc@1  39.67 ( 35.56), Val   Acc@3  73.67 ( 74.65), val   Loss 2.0413e+00 (2.0871e+00)
+[2020-02-08 01:13:28,537] [miniImageNet] [INFO] Epoch:47 || Test  Acc@1  36.67 ( 39.83), Test  Acc@3  76.00 ( 79.18), Test  Loss 2.0150e+00 (1.8769e+00) || Best Acc@1:35.561336517333984
+[2020-02-08 01:16:03,243] [miniImageNet] [INFO] Epoch:48 || Train Acc@1 91.250 (77.002), Train Acc@3 100.000 (96.900), train Loss 5.7810e-01 (1.1638e+00)
+[2020-02-08 01:16:03,244] [miniImageNet] [INFO] Epoch:48 || Val   Acc@1  36.50 ( 35.33), Val   Acc@3  77.17 ( 74.50), val   Loss 2.0540e+00 (2.0936e+00)
+[2020-02-08 01:16:03,244] [miniImageNet] [INFO] Epoch:48 || Test  Acc@1  44.00 ( 40.02), Test  Acc@3  79.50 ( 78.83), Test  Loss 1.7056e+00 (1.8806e+00) || Best Acc@1:35.561336517333984
+[2020-02-08 01:18:31,160] [miniImageNet] [INFO] Epoch:49 || Train Acc@1 62.812 (78.175), Train Acc@3 93.750 (97.103), train Loss 2.1495e+00 (1.1101e+00)
+[2020-02-08 01:18:31,161] [miniImageNet] [INFO] Epoch:49 || Val   Acc@1  42.83 ( 35.11), Val   Acc@3  78.50 ( 74.55), val   Loss 1.9024e+00 (2.0832e+00)
+[2020-02-08 01:18:31,161] [miniImageNet] [INFO] Epoch:49 || Test  Acc@1  40.17 ( 40.34), Test  Acc@3  81.00 ( 79.10), Test  Loss 1.9677e+00 (1.8602e+00) || Best Acc@1:35.561336517333984
+[2020-02-08 01:21:09,977] [miniImageNet] [INFO] Epoch:50 || Train Acc@1 81.250 (78.211), Train Acc@3 98.438 (97.148), train Loss 1.0213e+00 (1.1153e+00)
+[2020-02-08 01:21:09,977] [miniImageNet] [INFO] Epoch:50 || Val   Acc@1  31.17 ( 34.86), Val   Acc@3  72.00 ( 74.45), val   Loss 2.1743e+00 (2.0946e+00)
+[2020-02-08 01:21:09,977] [miniImageNet] [INFO] Epoch:50 || Test  Acc@1  38.33 ( 40.19), Test  Acc@3  77.33 ( 79.51), Test  Loss 1.9698e+00 (1.8619e+00) || Best Acc@1:35.561336517333984
+[2020-02-08 01:23:36,498] [miniImageNet] [INFO] Epoch:51 || Train Acc@1 69.062 (78.497), Train Acc@3 96.875 (97.186), train Loss 2.1522e+00 (1.0925e+00)
+[2020-02-08 01:23:36,499] [miniImageNet] [INFO] Epoch:51 || Val   Acc@1  34.33 ( 35.33), Val   Acc@3  71.50 ( 74.39), val   Loss 2.1335e+00 (2.0901e+00)
+[2020-02-08 01:23:36,499] [miniImageNet] [INFO] Epoch:51 || Test  Acc@1  33.33 ( 40.26), Test  Acc@3  74.83 ( 78.98), Test  Loss 2.0611e+00 (1.8599e+00) || Best Acc@1:35.561336517333984
+[2020-02-08 01:26:04,130] [miniImageNet] [INFO] Epoch:52 || Train Acc@1 60.000 (79.206), Train Acc@3 95.625 (97.339), train Loss 1.2708e+00 (1.0607e+00)
+[2020-02-08 01:26:04,131] [miniImageNet] [INFO] Epoch:52 || Val   Acc@1  31.00 ( 35.18), Val   Acc@3  71.67 ( 74.66), val   Loss 2.2391e+00 (2.0829e+00)
+[2020-02-08 01:26:04,131] [miniImageNet] [INFO] Epoch:52 || Test  Acc@1  41.50 ( 39.80), Test  Acc@3  82.17 ( 79.41), Test  Loss 1.7828e+00 (1.8650e+00) || Best Acc@1:35.561336517333984
+[2020-02-08 01:28:43,343] [miniImageNet] [INFO] Epoch:53 || Train Acc@1 51.875 (78.957), Train Acc@3 91.562 (97.180), train Loss 2.0611e+00 (1.0534e+00)
+[2020-02-08 01:28:43,344] [miniImageNet] [INFO] Epoch:53 || Val   Acc@1  33.17 ( 34.82), Val   Acc@3  71.17 ( 74.29), val   Loss 2.1602e+00 (2.0981e+00)
+[2020-02-08 01:28:43,344] [miniImageNet] [INFO] Epoch:53 || Test  Acc@1  38.00 ( 40.75), Test  Acc@3  78.17 ( 79.61), Test  Loss 1.8630e+00 (1.8535e+00) || Best Acc@1:35.561336517333984
+[2020-02-08 01:31:21,120] [miniImageNet] [INFO] Epoch:54 || Train Acc@1 37.188 (77.743), Train Acc@3 82.812 (97.038), train Loss 3.1512e+00 (1.1120e+00)
+[2020-02-08 01:31:21,120] [miniImageNet] [INFO] Epoch:54 || Val   Acc@1  34.00 ( 35.42), Val   Acc@3  72.67 ( 74.59), val   Loss 2.1770e+00 (2.0892e+00)
+[2020-02-08 01:31:21,121] [miniImageNet] [INFO] Epoch:54 || Test  Acc@1  37.17 ( 39.96), Test  Acc@3  73.17 ( 78.79), Test  Loss 2.0290e+00 (1.8757e+00) || Best Acc@1:35.561336517333984
+[2020-02-08 01:33:37,786] [miniImageNet] [INFO] Epoch:55 || Train Acc@1 85.625 (78.094), Train Acc@3 98.438 (97.042), train Loss 9.5649e-01 (1.1183e+00)
+[2020-02-08 01:33:37,787] [miniImageNet] [INFO] Epoch:55 || Val   Acc@1  34.33 ( 34.97), Val   Acc@3  70.00 ( 74.00), val   Loss 2.3672e+00 (2.1065e+00)
+[2020-02-08 01:33:37,787] [miniImageNet] [INFO] Epoch:55 || Test  Acc@1  45.00 ( 40.10), Test  Acc@3  83.17 ( 79.29), Test  Loss 1.7738e+00 (1.8775e+00) || Best Acc@1:35.561336517333984
+[2020-02-08 01:35:53,180] [miniImageNet] [INFO] Epoch:56 || Train Acc@1 87.812 (77.340), Train Acc@3 99.688 (96.945), train Loss 6.3747e-01 (1.1222e+00)
+[2020-02-08 01:35:53,181] [miniImageNet] [INFO] Epoch:56 || Val   Acc@1  31.00 ( 34.81), Val   Acc@3  73.00 ( 74.09), val   Loss 2.2480e+00 (2.1044e+00)
+[2020-02-08 01:35:53,181] [miniImageNet] [INFO] Epoch:56 || Test  Acc@1  38.83 ( 40.19), Test  Acc@3  76.50 ( 79.10), Test  Loss 1.9551e+00 (1.8865e+00) || Best Acc@1:35.561336517333984
+[2020-02-08 01:38:04,106] [miniImageNet] [INFO] Epoch:57 || Train Acc@1 89.688 (77.028), Train Acc@3 99.375 (96.818), train Loss 5.8195e-01 (1.1609e+00)
+[2020-02-08 01:38:04,107] [miniImageNet] [INFO] Epoch:57 || Val   Acc@1  35.17 ( 35.34), Val   Acc@3  72.17 ( 74.14), val   Loss 2.1547e+00 (2.1089e+00)
+[2020-02-08 01:38:04,107] [miniImageNet] [INFO] Epoch:57 || Test  Acc@1  39.67 ( 40.01), Test  Acc@3  77.17 ( 78.91), Test  Loss 2.0069e+00 (1.8792e+00) || Best Acc@1:35.561336517333984
+[2020-02-08 01:40:05,419] [miniImageNet] [INFO] Epoch:58 || Train Acc@1 90.000 (76.676), Train Acc@3 98.125 (96.763), train Loss 8.1707e-01 (1.1679e+00)
+[2020-02-08 01:40:05,419] [miniImageNet] [INFO] Epoch:58 || Val   Acc@1  33.17 ( 34.90), Val   Acc@3  70.83 ( 74.21), val   Loss 2.1548e+00 (2.1198e+00)
+[2020-02-08 01:40:05,419] [miniImageNet] [INFO] Epoch:58 || Test  Acc@1  42.83 ( 40.58), Test  Acc@3  80.50 ( 79.27), Test  Loss 1.7627e+00 (1.8548e+00) || Best Acc@1:35.561336517333984
+[2020-02-08 01:42:09,653] [miniImageNet] [INFO] Epoch:59 || Train Acc@1 83.125 (78.144), Train Acc@3 98.125 (97.182), train Loss 8.2540e-01 (1.0906e+00)
+[2020-02-08 01:42:09,654] [miniImageNet] [INFO] Epoch:59 || Val   Acc@1  34.33 ( 34.75), Val   Acc@3  73.33 ( 74.09), val   Loss 2.3037e+00 (2.1087e+00)
+[2020-02-08 01:42:09,654] [miniImageNet] [INFO] Epoch:59 || Test  Acc@1  37.17 ( 40.19), Test  Acc@3  80.50 ( 79.09), Test  Loss 1.9268e+00 (1.8639e+00) || Best Acc@1:35.561336517333984

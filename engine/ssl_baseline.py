@@ -13,11 +13,9 @@ import torch
 import torch.nn.functional as F
 from .averagemeter import AverageMeter, ProgressMeter
 from network.net_tools import one_hot
-from preprocess.mixup import TIM, TIM_S, JS_TIM
+from preprocess.mixup import TIM, TIM_S
 from preprocess.tools import shuffle_channel
 from preprocess.visualize import show_Images
-
-from preprocess.adaptive_instance_normalization import shuffle_mean_std
 
 sys.dont_write_bytecode = True
 
@@ -64,10 +62,6 @@ def train(opt, epoch, emb_net, cla_net, ssl_net, train_loader, optimizer, criter
         support_images = TIM_S(support_images, 0.8, use_cuda)
         ssl_images, q_targets_a, q_targets_b, lam = TIM(ssl_images, query_targets, alpha=0.6, use_cuda=use_cuda)
         query_images, q_targets_a, q_targets_b, lam = TIM(query_images, query_targets, alpha=0.6, use_cuda=use_cuda)
-
-        # TODO: JS_TIM [Jigsaw puzzle task internal mix]
-        # def JS_TIM(data, n_hotels=6, length=10, use_cuda=True):
-        # ssl_images = JS_TIM(ssl_images, 6, 20, True)
 
         # Show images
         from preprocess.visualize import show_Images

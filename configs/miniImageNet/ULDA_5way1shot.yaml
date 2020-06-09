@@ -34,11 +34,11 @@ trainer:
   no_augment: False # False
 
   eps: 0.0  # label smooth [no label smooth : eps<=0.]
-  output_dir: "/data/ULDA_miniImageNet_experiments"
+  output_dir: "../saved_model/ULDA_exp"
   seed: 12345
   epochs: 60
   test_epoch: -1
-  stage: 'train'
+  stage: 'test'
   save_freq: 5
   print_freq: 50
 

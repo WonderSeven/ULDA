@@ -1,0 +1,67 @@
+# Copyright (C) 2017 NVIDIA Corporation.  All rights reserved.
+# Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
+# Implementation for: Unsupervised Meta-Learning For Few-Shot Image Classification
+# https://arxiv.org/abs/1811.11819
+
+gpu_ids: '4'
+
+model:
+  embedding: "Conv64F1600"  # Conv64F1600 / Conv64F
+  classifier: "ProtoNet"  # protonet / SVM_CS / DN4
+  kwargs: "{}"
+
+datasets:
+  root: "/data/tiexin/DataSets/miniImageNet"
+  train_data_dir: "../datasets/miniImageNet/train.csv"
+  val_data_dir: "../datasets/miniImageNet/val.csv"
+
+  test_data_dir: "../datasets/miniImageNet/test.csv"
+  episode_train_num: 10000  # 10000
+  episode_val_num: 1000
+  episode_test_num: 1000
+  name: "miniImageNet"
+  nclass: 100
+  way_num: 5
+  shot_num: 5
+  query_num: 15
+
+dataloader:
+  train_batch_size: 16 # 128
+  test_batch_size: 8
+  image_size: 84
+  num_workers: 8
+  shuffle: True
+
+trainer:
+  loggers: ['console', 'file']
+  eval_in_training: True
+  no_augment: False # False
+
+  eps: 0.0  # label smooth [no label smooth : eps<=0.]
+  output_dir: "/data/tiexin/data/No_transfer/SSL_Experiments/ProtoNet/ProtoNet_FSL+R+SSL+AutoAugment+AUG+TIM(S0.8, Q0.6)_V1"
+  seed: 12345
+  epochs: 60
+  test_epoch: -1
+  stage: 'test'
+  save_freq: 5
+  print_freq: 50
+
+scheduler:
+  name: 'lambda'
+  warmup_epochs: 0
+  iteration_decay: False
+  kwargs : "{'step_size':10, 'gamma':0.1}"
+
+solver:
+  base_lr: 0.001   # 0.1
+  optimizer: "SGD"
+  momentum: 0.9
+  weight_decay: 5e-4
+  criterion: 'cross_entropy'
+[2020-02-19 14:49:03,368] [miniImageNet] [INFO] 
+[2020-02-19 14:49:15,915] [miniImageNet] [INFO] Epoch:0 || Test Acc@1  52.67 ( 55.27), Test Acc@3  91.17 ( 89.04), Test Loss 1.1451e+00 (1.1394e+00) || Test accuracy:55.27067184448242, h:[0.5648646]
+[2020-02-19 14:49:28,709] [miniImageNet] [INFO] Epoch:1 || Test Acc@1  52.00 ( 55.61), Test Acc@3  87.50 ( 89.35), Test Loss 1.2282e+00 (1.1351e+00) || Test accuracy:55.609336853027344, h:[0.5979093]
+[2020-02-19 14:49:40,736] [miniImageNet] [INFO] Epoch:2 || Test Acc@1  60.33 ( 55.23), Test Acc@3  90.67 ( 89.29), Test Loss 1.0587e+00 (1.1397e+00) || Test accuracy:55.23200225830078, h:[0.5476905]
+[2020-02-19 14:49:54,247] [miniImageNet] [INFO] Epoch:3 || Test Acc@1  53.67 ( 55.61), Test Acc@3  89.83 ( 89.37), Test Loss 1.1210e+00 (1.1329e+00) || Test accuracy:55.60799789428711, h:[0.5943425]
+[2020-02-19 14:50:08,202] [miniImageNet] [INFO] Epoch:4 || Test Acc@1  57.17 ( 55.33), Test Acc@3  88.33 ( 89.21), Test Loss 1.1456e+00 (1.1380e+00) || Test accuracy:55.330665588378906, h:[0.5690046]
+[2020-02-19 14:50:08,235] [miniImageNet] [INFO] Aver_accuracy:55.41013717651367, Aver_h:0.5747622966766357

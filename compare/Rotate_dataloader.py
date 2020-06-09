@@ -41,15 +41,9 @@ rotation_transforms = []
 for i in range(4):
     angle = i * 90
     transform = transforms.Compose([
-        # transforms.Resize((256, 256)),
-        # ImageNetPolicy(),
-
         transforms.Resize((84, 84)),
         transforms.RandomCrop(84, padding=8),
         transforms.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4),
-        # Cutout(),
-
-        # transforms.Resize((84, 84)),
         Rotate(angle),
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
@@ -60,10 +54,6 @@ AutoAugment_Transform = transforms.Compose([
     # transforms.Resize((256, 256)),
     # ImageNetPolicy(),
     transforms.Resize((84, 84)),
-    # transforms.RandomCrop(84, padding=8),
-    # transforms.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4),
-    # transforms.RandomHorizontalFlip(),
-
     transforms.ToTensor(),
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 ])
